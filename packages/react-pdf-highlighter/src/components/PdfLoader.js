@@ -5,22 +5,22 @@ import React, { Component } from "react";
 import type { T_PDFJS, T_PDFJS_Document } from "../types";
 
 import pdfjs from "pdfjs-dist";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 type Props = {
   url: string,
   beforeLoad: React$Element<*>,
   children: (pdfDocument: T_PDFJS_Document) => React$Element<*>,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 };
 
 type State = {
-  pdfDocument: ?T_PDFJS_Document
+  pdfDocument: ?T_PDFJS_Document,
 };
 
 class PdfLoader extends Component<Props, State> {
   state = {
-    pdfDocument: null
+    pdfDocument: null,
   };
 
   componentDidMount() {
@@ -28,9 +28,9 @@ class PdfLoader extends Component<Props, State> {
 
     pdfjs
       .getDocument({ url: url, eventBusDispatchToDOM: true })
-      .promise.then(pdfDocument => {
+      .promise.then((pdfDocument) => {
         this.setState({
-          pdfDocument: pdfDocument
+          pdfDocument: pdfDocument,
         });
       })
       .catch(onError);
